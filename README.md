@@ -1,1 +1,1 @@
-This is a literal follow-up with the tutorial provided by Google on its official documentation.
+This is a literal follow-up with the [tutorial](https://developer.android.com/jetpack/compose/tutorial) provided by Google on its official documentation.
