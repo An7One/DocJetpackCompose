@@ -1,5 +1,6 @@
 package com.an7one.officialdoc.jetpackcompose
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.an7one.officialdoc.jetpackcompose.codelab.layout.DemoLayoutActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         setContent {
             NewsStory()
         }
+
+        startActivity(Intent(this, DemoLayoutActivity::class.java))
     }
 }
 

@@ -64,6 +64,8 @@ dependencies {
     implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-rc01'
     implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.0-rc01'
 
+    implementation 'com.google.accompanist:accompanist-coil:0.10.0'
+
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.0-rc01'
 
