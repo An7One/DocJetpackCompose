@@ -14,19 +14,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.AlignmentLine
-import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import com.an7one.officialdoc.jetpackcompose.codelab.layout.ui.LayoutsCodelabTheme
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
@@ -57,8 +54,13 @@ class DemoLayoutActivity : AppCompatActivity() {
             BodyContentCustomLayout()
              */
 
+            /*
             // 08 Complex Custom Layout
             BodyContentComplexLayout()
+             */
+
+            // 09 Layout Modifiers Under the Hood
+            BondyContentLayoutModifier()
         }
     }
 }
@@ -433,6 +435,62 @@ fun ChipPreview() {
 fun ComplexLayoutsCodelabPreview() {
     LayoutsCodelabTheme {
         LayoutsCodelab()
+    }
+}
+// </editor-fold>
+
+// <editor-fold desc="09. Layout Modifiers Under the Hood"
+// how to create a modifier
+@Stable
+fun Modifier.padding(all: Dp) =
+    this then PaddingModifier(start = all, top = all, end = all, bottom = all, rtlAware = true)
+
+// implementation detail
+private class PaddingModifier(
+    private val start: Dp = 0.dp,
+    private val top: Dp = 0.dp,
+    private val end: Dp = 0.dp,
+    private val bottom: Dp = 0.dp,
+    private val rtlAware: Boolean
+) : LayoutModifier {
+
+    override fun MeasureScope.measure(
+        measurable: Measurable,
+        constraints: Constraints
+    ): MeasureResult {
+        val horizontal = start.roundToPx() + end.roundToPx()
+        val vertical = top.roundToPx() + bottom.roundToPx()
+
+        val placeable = measurable.measure(constraints.offset(-horizontal, -vertical))
+
+        val width = constraints.constrainWidth(placeable.width + horizontal)
+        val height = constraints.constrainHeight(placeable.height + vertical)
+
+        return layout(width, height) {
+            if (rtlAware)
+                placeable.placeRelative(start.roundToPx(), top.roundToPx())
+            else
+                placeable.place(start.roundToPx(), top.roundToPx())
+        }
+    }
+}
+
+@Composable
+fun BondyContentLayoutModifier(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .background(color = Color.LightGray)
+            .size(200.dp)
+            .padding(16.dp)
+            .horizontalScroll(
+                rememberScrollState()
+            )
+    ) {
+        StaggeredGrid {
+            for (topic in topics) {
+                Chip(text = topic, modifier = Modifier.padding(8.dp))
+            }
+        }
     }
 }
 // </editor-fold>
