@@ -32,44 +32,51 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        useIR = true
+        allWarningsAsErrors = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.0-rc01'
+        kotlinCompilerExtensionVersion "${version_compose}"
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
+
+    implementation 'androidx.core:core-ktx:1.7.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    implementation 'androidx.compose.ui:ui:1.0.0-rc01'
+    implementation "androidx.compose.ui:ui:$version_compose"
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.0-rc01'
-    debugImplementation 'androidx.compose.ui:ui-tooling:1.0.0-rc01'
-    implementation 'androidx.compose.ui:ui-tooling-preview:1.0.0-rc01'
+    implementation "androidx.compose.ui:ui-tooling:$version_compose"
+    debugImplementation "androidx.compose.ui:ui-tooling:$version_compose"
+    implementation "androidx.compose.ui:ui-tooling-preview:$version_compose"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations.etc.)
-    implementation 'androidx.compose.foundation:foundation:1.0.0-rc01'
+    implementation "androidx.compose.foundation:foundation:$version_compose"
     // Material Design
-    implementation 'androidx.compose.material:material:1.0.0-rc01'
+    implementation "androidx.compose.material:material:$version_compose"
     // Material Design Icons
-    implementation 'androidx.compose.material:material-icons-core:1.0.0-rc01'
-    implementation 'androidx.compose.material:material-icons-extended:1.0.0-rc01'
+    implementation "androidx.compose.material:material-icons-core:$version_compose"
+    implementation "androidx.compose.material:material-icons-extended:$version_compose"
     // Integration with Activities
     implementation 'androidx.activity:activity-compose:1.3.0-rc01'
     // Integration with ViewModel
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha08'
     // Integration with Observables
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-rc01'
-    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.0-rc01'
+    implementation "androidx.compose.runtime:runtime-livedata:$version_compose"
+    implementation "androidx.compose.runtime:runtime-rxjava2:$version_compose"
 
-    implementation 'com.google.accompanist:accompanist-coil:0.10.0'
+    implementation 'com.google.accompanist:accompanist-coil:0.13.0'
+
+    // Constraint Layout
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.0-rc01'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$version_compose"
 
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
