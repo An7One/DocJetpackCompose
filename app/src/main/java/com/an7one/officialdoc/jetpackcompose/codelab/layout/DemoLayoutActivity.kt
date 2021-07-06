@@ -40,10 +40,15 @@ class DemoLayoutActivity : AppCompatActivity() {
             BodyContentLayoutModifier()
              */
 
+            /*
             // 10 Constraint Layout
             // ConstraintLayoutContent()
             // LargeConstraintLayout()
             DecoupledConstraintLayout()
+             */
+
+            // 11 Intrinsics
+            TwoTexts(text1 = "Hi", text2 = "there")
         }
     }
 }
