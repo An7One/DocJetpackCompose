@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.an7one.officialDoc.jetpackCompose.codeLab.model.ToDoIcon
@@ -36,25 +34,48 @@ import kotlin.random.Random
 @Composable
 fun ScreenToDoItem(
     items: List<ToDoItem>,
+    itemCurEditing: ToDoItem?,
     onAddingItem: (ToDoItem) -> Unit,
-    onRemovingItem: (ToDoItem) -> Unit
+    onRemovingItem: (ToDoItem) -> Unit,
+    onStartEditing: (ToDoItem) -> Unit,
+    onEditItemChange: (ToDoItem) -> Unit,
+    onEditDone: () -> Unit
 ) {
     Column {
-        // add ToDoItemInputBackground and ToDoItem at the top of the ToDoScreen
-        BackgroundToDoItemInput(elevate = true, modifier = Modifier.fillMaxWidth()) {
-            EntryInputToDoItem(onItemComplete = onAddingItem)
+        val enableTopSelection = itemCurEditing == null
+        BackgroundToDoItemInput(elevate = enableTopSelection) {
+            if (enableTopSelection)
+                EntryInputToDoItem(onAddingItem)
+            else
+                Text(
+                    text = "Editing Item",
+                    style = MaterialTheme.typography.h6,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                )
         }
 
         LazyColumn(
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(top = 8.dp)
         ) {
-            items(items = items) {
-                RowToDoItem(
-                    toDoItem = it,
-                    onItemClicked = { onRemovingItem(it) },
-                    modifier = Modifier.fillParentMaxWidth()
-                )
+            items(items = items) { toDoItem ->
+                if (itemCurEditing?.id == toDoItem.id)
+                    InlineEditorToDoItem(
+                        item = itemCurEditing,
+                        onEditItemChange = onEditItemChange,
+                        onEditDone = onEditDone,
+                        onRemovingItem = { onRemovingItem(toDoItem) }
+                    )
+                else
+                    RowToDoItem(
+                        toDoItem = toDoItem,
+                        onItemClicked = { onStartEditing(it) },
+                        modifier = Modifier.fillParentMaxWidth()
+                    )
             }
         }
 
@@ -164,6 +185,23 @@ private fun RowToDoItem(
     }
 }
 
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@Composable
+fun InlineEditorToDoItem(
+    item: ToDoItem,
+    onEditItemChange: (ToDoItem) -> Unit,
+    onEditDone: () -> Unit,
+    onRemovingItem: (ToDoItem) -> Unit
+) = InputToDoItem(
+    text = item.task,
+    onTextChange = { onEditItemChange(item.copy(task = it)) },
+    icon = item.icon,
+    onIconChange = { onEditItemChange(item.copy(icon = it)) },
+    submit = onEditDone,
+    iconsVisible = true
+)
+
 private fun randomTint(): Float = Random.nextFloat().coerceIn(0.3f, 0.9f)
 
 @ExperimentalAnimationApi
@@ -178,7 +216,7 @@ fun PreviewScreenToDoItem() {
         ToDoItem("Build Dynamic UIs", ToDoIcon.Square)
     )
 
-    ScreenToDoItem(items, {}, {})
+    ScreenToDoItem(items, null, {}, {}, {}, {}, {})
 }
 
 @Preview

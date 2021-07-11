@@ -1,3 +1,6 @@
+/**
+ * to be completed
+ */
 package com.an7one.officialDoc.jetpackCompose.codeLab.ui.activity
 
 import android.os.Bundle

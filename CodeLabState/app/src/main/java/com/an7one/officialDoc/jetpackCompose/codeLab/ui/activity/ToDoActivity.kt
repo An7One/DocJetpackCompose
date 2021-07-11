@@ -42,7 +42,11 @@ private fun ScreenToDoItemActivity(viewModelToDoItem: ViewModelToDoItem) {
      */
     ScreenToDoItem(
         items = viewModelToDoItem.toDoItems,
+        itemCurEditing = viewModelToDoItem.curEditItem,
         onAddingItem = viewModelToDoItem::addItem,
-        onRemovingItem = viewModelToDoItem::removeItem
+        onRemovingItem = viewModelToDoItem::removeItem,
+        onStartEditing = viewModelToDoItem::onEditItemSelected,
+        onEditItemChange = viewModelToDoItem::onEditItemChange,
+        onEditDone = viewModelToDoItem::onEditDone
     )
 }
