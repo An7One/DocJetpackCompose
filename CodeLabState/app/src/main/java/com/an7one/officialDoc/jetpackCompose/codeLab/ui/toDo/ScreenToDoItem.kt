@@ -95,23 +95,29 @@ fun ScreenToDoItem(
 @ExperimentalAnimationApi
 @Composable
 fun EntryInputToDoItem(onItemComplete: (ToDoItem) -> Unit) {
-    val (text, setText) = remember { mutableStateOf("") }
-    val (icon, setIcon) = remember { mutableStateOf(ToDoIcon.Default) }
+    val (text, onTextChange) = remember { mutableStateOf("") }
+    val (icon, onIconChange) = remember { mutableStateOf(ToDoIcon.Default) }
     val iconsVisible = text.isNotBlank()
     val submit = {
         onItemComplete(ToDoItem(text, icon))
-        setIcon(ToDoIcon.Default)
-        setText("")
+        onTextChange("")
+        onIconChange(ToDoIcon.Default)
     }
 
     InputToDoItem(
         text = text,
-        onTextChange = setText,
+        onTextChange = onTextChange,
         icon = icon,
-        onIconChange = setIcon,
+        onIconChange = onIconChange,
         submit = submit,
         iconsVisible = iconsVisible
-    )
+    ) {
+        ButtonAddToDoItem(
+            onClick = submit, // to pass the submit callback to `ButtonToDoEditText`
+            text = "Add",
+            enabled = text.isNotBlank() // to enable if the text is not blank
+        )
+    }
 }
 
 @ExperimentalAnimationApi
@@ -123,7 +129,8 @@ fun InputToDoItem(
     icon: ToDoIcon,
     onIconChange: (ToDoIcon) -> Unit,
     submit: () -> Unit,
-    iconsVisible: Boolean
+    iconsVisible: Boolean,
+    slotButton: @Composable () -> Unit
 ) {
     // onItemComplete is an event that will be fired when an item is completed by the user
     Column {
@@ -141,12 +148,10 @@ fun InputToDoItem(
                 onImeAction = submit // to pass the submit callback to `TextFieldToDoInput`
             )
 
-            ButtonAddToDoItem(
-                onClick = submit, // to pass the submit callback to `ButtonToDoEditText`
-                text = "Add",
-                modifier = Modifier.align(Alignment.CenterVertically),
-                enabled = text.isNotBlank() // to enable if the text is not blank
-            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(Modifier.align(Alignment.CenterVertically)) {
+                slotButton()
+            }
         }
 
         if (iconsVisible)
@@ -192,14 +197,34 @@ fun InlineEditorToDoItem(
     item: ToDoItem,
     onEditItemChange: (ToDoItem) -> Unit,
     onEditDone: () -> Unit,
-    onRemovingItem: (ToDoItem) -> Unit
+    onRemovingItem: () -> Unit
 ) = InputToDoItem(
     text = item.task,
     onTextChange = { onEditItemChange(item.copy(task = it)) },
     icon = item.icon,
     onIconChange = { onEditItemChange(item.copy(icon = it)) },
     submit = onEditDone,
-    iconsVisible = true
+    iconsVisible = true,
+    slotButton = {
+        Row {
+            val btnsShrink = Modifier.widthIn(20.dp)
+            TextButton(onClick = onEditDone, modifier = btnsShrink) {
+                Text(
+                    text = "\uD83D\uDCBE", // floppy disk
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(30.dp)
+                )
+            }
+
+            TextButton(onClick = onRemovingItem, modifier = btnsShrink) {
+                Text(
+                    text = "❌",
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(30.dp)
+                )
+            }
+        }
+    }
 )
 
 private fun randomTint(): Float = Random.nextFloat().coerceIn(0.3f, 0.9f)
