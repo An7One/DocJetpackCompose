@@ -42,7 +42,7 @@ fun ToDoScreen(
     Column {
         // add ToDoItemInputBackground and ToDoItem at the top of the ToDoScreen
         BackgroundToDoItemInput(elevate = true, modifier = Modifier.fillMaxWidth()) {
-            ToDoItemInput(onItemComplete = onAddingItem)
+            EntryInputToDoItem(onItemComplete = onAddingItem)
         }
 
         LazyColumn(
@@ -70,18 +70,40 @@ fun ToDoScreen(
     }
 }
 
-@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 @Composable
-fun ToDoItemInput(onItemComplete: (ToDoItem) -> Unit) {
+fun EntryInputToDoItem(onItemComplete: (ToDoItem) -> Unit) {
     val (text, setText) = remember { mutableStateOf("") }
     val (icon, setIcon) = remember { mutableStateOf(ToDoIcon.Default) }
     val iconsVisible = text.isNotBlank()
     val submit = {
-        onItemComplete(ToDoItem(text, icon)) // to send onItemComplete event
+        onItemComplete(ToDoItem(text, icon))
         setIcon(ToDoIcon.Default)
-        setText("")  // to clear the internal text
+        setText("")
     }
+
+    InputToDoItem(
+        text = text,
+        onTextChange = setText,
+        icon = icon,
+        onIconChange = setIcon,
+        submit = submit,
+        iconsVisible = iconsVisible
+    )
+}
+
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
+@Composable
+fun InputToDoItem(
+    text: String,
+    onTextChange: (String) -> Unit,
+    icon: ToDoIcon,
+    onIconChange: (ToDoIcon) -> Unit,
+    submit: () -> Unit,
+    iconsVisible: Boolean
+) {
     // onItemComplete is an event that will be fired when an item is completed by the user
     Column {
         Row(
@@ -91,7 +113,7 @@ fun ToDoItemInput(onItemComplete: (ToDoItem) -> Unit) {
         ) {
             TextFieldToDoInput(
                 text = text,
-                onTextChange = setText,
+                onTextChange = onTextChange,
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp),
@@ -107,7 +129,7 @@ fun ToDoItemInput(onItemComplete: (ToDoItem) -> Unit) {
         }
 
         if (iconsVisible)
-            AnimatedIconRow(icon, setIcon, Modifier.padding(top = 8.dp))
+            AnimatedIconRow(icon, onIconChange, Modifier.padding(top = 8.dp))
         else
             Spacer(modifier = Modifier.height(16.dp))
     }
