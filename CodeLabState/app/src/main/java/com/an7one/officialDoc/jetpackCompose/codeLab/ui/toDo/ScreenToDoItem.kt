@@ -34,7 +34,7 @@ import kotlin.random.Random
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-fun ToDoScreen(
+fun ScreenToDoItem(
     items: List<ToDoItem>,
     onAddingItem: (ToDoItem) -> Unit,
     onRemovingItem: (ToDoItem) -> Unit
@@ -50,7 +50,7 @@ fun ToDoScreen(
             contentPadding = PaddingValues(top = 8.dp)
         ) {
             items(items = items) {
-                ToDoRow(
+                RowToDoItem(
                     toDoItem = it,
                     onItemClicked = { onRemovingItem(it) },
                     modifier = Modifier.fillParentMaxWidth()
@@ -143,7 +143,7 @@ fun InputToDoItem(
  * @param modifier modifier for this element
  */
 @Composable
-private fun ToDoRow(
+private fun RowToDoItem(
     toDoItem: ToDoItem,
     onItemClicked: (ToDoItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -170,7 +170,7 @@ private fun randomTint(): Float = Random.nextFloat().coerceIn(0.3f, 0.9f)
 @ExperimentalComposeUiApi
 @Preview
 @Composable
-fun PreviewToDoScreen() {
+fun PreviewScreenToDoItem() {
     val items = listOf(
         ToDoItem("Learn Compose", ToDoIcon.Event),
         ToDoItem("Take the CodLab"),
@@ -178,14 +178,14 @@ fun PreviewToDoScreen() {
         ToDoItem("Build Dynamic UIs", ToDoIcon.Square)
     )
 
-    ToDoScreen(items, {}, {})
+    ScreenToDoItem(items, {}, {})
 }
 
 @Preview
 @Composable
-fun PreviewToDoRow() {
+fun PreviewRowToDoItem() {
     val toDoItem = remember { generateRandomToDoItem() }
-    ToDoRow(
+    RowToDoItem(
         toDoItem = toDoItem,
         onItemClicked = {},
         modifier = Modifier.fillMaxSize()
