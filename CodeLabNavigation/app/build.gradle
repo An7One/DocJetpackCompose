@@ -1,0 +1,104 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.an7one.officialDoc.jetpackCompose.codeLabNavigation"
+        minSdk 21
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+//    signingConfigs {
+//        debug {
+//            storeFile rootProject.file('debug.keystore')
+//            storePassword 'android'
+//            keyAlias 'androiddebugkey'
+//            keyPassword 'android'
+//        }
+//    }
+
+    buildTypes {
+//        debug {
+//            signingConfig signingConfigs.debug
+//        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        compose true
+
+        // to disable unused AGP features
+        buildConfig false
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.versionCompose
+    }
+
+    packagingOptions {
+        exclude "META-INF/licenses/**"
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+    }
+}
+
+dependencies {
+
+    implementation "androidx.appcompat:appcompat:$versionAppCompat"
+    implementation "androidx.core:core-ktx:$versionKTX"
+    implementation "com.google.android.material:material:$versionMaterial"
+    implementation "androidx.fragment:fragment-ktx:$versionFragment"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versionKotlin"
+
+    // Compose
+    implementation "androidx.compose.runtime:runtime:$versionCompose"
+    implementation "androidx.compose.ui:ui:$versionCompose"
+    implementation "androidx.compose.foundation:foundation:$versionCompose"
+    implementation "androidx.compose.foundation:foundation-layout:$versionCompose"
+    implementation "androidx.compose.material:material:$versionCompose"
+    implementation "androidx.compose.material:material:$versionCompose"
+    implementation "androidx.compose.runtime:runtime-livedata:$versionCompose"
+    implementation "androidx.compose.ui:ui-tooling:$versionCompose"
+    implementation "androidx.compose.material:material-icons-extended:$versionCompose"
+    implementation "androidx.activity:activity-compose:$versionCompose"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
+
+    // Testing dependencies
+    androidTestImplementation "androidx.arch.core:core-testing:$versionCoreTesting"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versionEspresso"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versionEspresso"
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+
+    // Compose testing dependencies
+    androidTestImplementation "androidx.compose.ui:ui-test:$versionCompose"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$versionCompose"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$versionCompose"
+}
