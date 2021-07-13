@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.R
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.util.AccountDecimalFormat
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.util.formatAmount
+import timber.log.Timber
 
 @Composable
 fun AccountRow(
@@ -75,7 +76,10 @@ private fun BaseRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val typography = MaterialTheme.typography
-        AccountIndicator(color = color, modifier = modifier)
+        AccountIndicator(
+            color = color,
+            modifier = modifier
+        )
         Spacer(modifier = Modifier.width(12.dp))
         Column(Modifier) {
             Text(text = title, style = typography.body1)

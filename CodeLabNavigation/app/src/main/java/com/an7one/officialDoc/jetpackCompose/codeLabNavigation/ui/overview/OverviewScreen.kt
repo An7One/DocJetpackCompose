@@ -2,7 +2,16 @@ package com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.overview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sort
@@ -34,7 +43,12 @@ fun OverviewBody(
     onClickSeeAllBills: () -> Unit = {},
     onAccountClick: (String) -> Unit = {},
 ) {
-    Column() {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+            .semantics { contentDescription = "Overview Screen" }
+    ) {
         AlertCard()
         Spacer(modifier = Modifier.height(RallyDefaultPadding))
         AccountsCard(onClickSeeAll = onClickSeeAllAccounts, onAccountClick = onAccountClick)
@@ -96,7 +110,6 @@ private fun AlertHeader(onClickSeeAll: () -> Unit) {
     }
 }
 
-
 @Composable
 private fun AlertItem(message: String) {
     Row(
@@ -133,6 +146,9 @@ private fun AlertItem(message: String) {
     }
 }
 
+/**
+ * The Accounts card within the Rally Overview screen.
+ */
 @Composable
 private fun AccountsCard(
     onClickSeeAll: () -> Unit,
@@ -180,7 +196,7 @@ private fun BillsCard(
 }
 
 @Composable
-private fun SeeAlLButton(
+private fun SeeAllButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -214,7 +230,7 @@ private fun <T> OverviewScreenCard(
             OverviewDivider(data = data, values = values, colors)
             Column(Modifier.padding(start = 16.dp, top = 4.dp, end = 8.dp)) {
                 data.take(SHOW_ITEMS).forEach { row(it) }
-                SeeAlLButton(
+                SeeAllButton(
                     modifier = Modifier.clearAndSetSemantics {
                         contentDescription = "All $title"
                     },

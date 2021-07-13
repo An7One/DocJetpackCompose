@@ -14,6 +14,31 @@ import java.lang.IllegalArgumentException
 
 
 enum class RallyScreen(
+    val icon: ImageVector
+) {
+    Overview(
+        icon = Icons.Filled.PieChart,
+    ),
+    Accounts(
+        icon = Icons.Filled.AttachMoney,
+    ),
+    Bills(
+        icon = Icons.Filled.MoneyOff,
+    );
+
+    companion object {
+        fun fromRoute(route: String?): RallyScreen =
+            when (route?.substringBefore("/")) {
+                Accounts.name -> Accounts
+                Bills.name -> Bills
+                Overview.name -> Overview
+                null -> Overview
+                else -> throw IllegalArgumentException("Route $route is not recognized")
+            }
+    }
+}
+
+enum class RallyScreen1(
     val icon: ImageVector,
     val body: @Composable ((String) -> Unit) -> Unit
 ) {
@@ -36,13 +61,13 @@ enum class RallyScreen(
     }
 
     companion object {
-        fun fromRoute(route: String?): RallyScreen =
+        fun fromRoute(route: String?): RallyScreen1 =
             when (route?.substringBefore("/")) {
                 Accounts.name -> Accounts
                 Bills.name -> Bills
                 Overview.name -> Overview
                 null -> Overview
-                else -> throw IllegalArgumentException("Route $route is not recognized")
+                else -> throw IllegalArgumentException("Route $route is not recognized.")
             }
     }
 }

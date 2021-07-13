@@ -25,6 +25,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.RallyScreen
+import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.RallyScreen1
 import java.util.*
 
 private val TabHeight = 56.dp
@@ -32,6 +33,82 @@ private const val InactiveTabOpacity = 0.60f
 private const val TabFadeInAnimationDuration = 150
 private const val TabFadeInAnimationDelay = 100
 private const val TabFadeOutAnimationDuration = 100
+
+@Composable
+fun RallyTabRow1(
+    allScreens: List<RallyScreen1>,
+    onTabSelected: (RallyScreen1) -> Unit,
+    curScreen: RallyScreen1
+) {
+    Surface(
+        Modifier
+            .height(TabHeight)
+            .fillMaxWidth()
+    ) {
+        Row(Modifier.selectableGroup()) {
+            allScreens.forEach { screen ->
+                RallyTab1(
+                    text = screen.name,
+                    icon = screen.icon,
+                    onSelected = { onTabSelected(screen) },
+                    selected = curScreen == screen
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RallyTab1(
+    text: String,
+    icon: ImageVector,
+    onSelected: () -> Unit,
+    selected: Boolean
+) {
+    val color = MaterialTheme.colors.onSurface
+    val durationMillis = if (selected) TabFadeInAnimationDuration else TabFadeOutAnimationDuration
+    val animSpec = remember {
+        tween<Color>(
+            durationMillis = durationMillis,
+            easing = LinearEasing,
+            delayMillis = TabFadeInAnimationDelay
+        )
+    }
+    val tabTintColor by animateColorAsState(
+        targetValue = if (selected) color else color.copy(alpha = InactiveTabOpacity),
+        animationSpec = animSpec
+    )
+    Row(
+        modifier = Modifier
+            .padding(16.dp)
+            .animateContentSize()
+            .height(TabHeight)
+            .selectable(
+                selected = selected,
+                onClick = onSelected,
+                role = Role.Tab,
+                interactionSource = remember {
+                    MutableInteractionSource()
+                },
+                indication = rememberRipple(
+                    bounded = false,
+                    radius = Dp.Unspecified,
+                    color = Color.Unspecified
+                )
+            )
+            .clearAndSetSemantics { contentDescription = text }
+    ) {
+        Icon(imageVector = icon, contentDescription = text, tint = tabTintColor)
+        if (selected) {
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(text.uppercase(Locale.getDefault()), color = tabTintColor)
+        }
+    }
+}
+
+
+
+
 
 @Composable
 fun RallyTabRow(

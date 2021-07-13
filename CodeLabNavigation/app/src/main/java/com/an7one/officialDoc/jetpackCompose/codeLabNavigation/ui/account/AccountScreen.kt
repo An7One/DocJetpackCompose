@@ -12,7 +12,7 @@ import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.component.Acco
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.component.StatementBody
 
 /**
- * the screen for the accounts
+ * the screen for the Accounts
  */
 @Composable
 fun AccountsBody(
