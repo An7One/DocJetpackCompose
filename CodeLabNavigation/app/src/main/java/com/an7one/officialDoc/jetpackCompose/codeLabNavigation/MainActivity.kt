@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navDeepLink
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.data.UserData
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.RallyScreen
 import com.an7one.officialDoc.jetpackCompose.codeLabNavigation.ui.account.AccountsBody
@@ -85,7 +86,10 @@ private fun RallyApp() {
                             // to make argument type-safe
                             type = NavType.StringType
                         }
-                    )
+                    ),
+                    deepLinks = listOf(navDeepLink {
+                        uriPattern = "rally://$navRouteAccounts/{name}"
+                    })
                 ) { entry ->
                     // to look up `name` in the arguments of `NavBackStackEntry`
                     val accountName = entry.arguments?.getString(ID_ARG_NAME)
