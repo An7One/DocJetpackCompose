@@ -6,4 +6,5 @@ Unknown Problems:
 <ol>
     <li>`onClick` of `AccountRow` cannot be triggered</li>
     <li>the animaiton `AnimatedCircle` cannot be displayed properly</li>
+    <li>`junit` failed to be imported</li> 
 </ol>
