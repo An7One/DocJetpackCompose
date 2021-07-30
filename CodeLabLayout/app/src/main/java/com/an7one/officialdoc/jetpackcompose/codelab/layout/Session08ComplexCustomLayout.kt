@@ -1,7 +1,7 @@
 /**
  * https://developer.android.com/codelabs/jetpack-compose-layouts?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fcompose%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fjetpack-compose-layouts#7
  */
-package com.an7one.officialdoc.jetpackcompose.codelab.layout
+package com.an7one.officialdoc.jetpackCompose.codelab.layout
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.an7one.officialdoc.jetpackcompose.codelab.layout.ui.LayoutsCodelabTheme
+import com.an7one.officialdoc.jetpackCompose.codelab.layout.ui.LayoutsCodelabTheme
 
 val topics = listOf(
     "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",

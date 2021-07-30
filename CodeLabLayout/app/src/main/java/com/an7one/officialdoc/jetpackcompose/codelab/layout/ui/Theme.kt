@@ -1,6 +1,5 @@
-package com.an7one.officialdoc.jetpackcompose.codelab.layout.ui
+package com.an7one.officialdoc.jetpackCompose.codelab.layout.ui
 
-import android.app.assist.AssistContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors

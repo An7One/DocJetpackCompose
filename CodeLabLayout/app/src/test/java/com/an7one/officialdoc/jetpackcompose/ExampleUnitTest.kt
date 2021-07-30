@@ -1,4 +1,4 @@
-package com.an7one.officialdoc.jetpackcompose
+package com.an7one.officialdoc.jetpackCompose
 
 import org.junit.Test
 

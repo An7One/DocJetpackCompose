@@ -1,4 +1,4 @@
-package com.an7one.officialdoc.jetpackcompose.codelab.layout
+package com.an7one.officialdoc.jetpackCompose.codelab.layout
 
 import android.os.Bundle
 import androidx.activity.compose.setContent

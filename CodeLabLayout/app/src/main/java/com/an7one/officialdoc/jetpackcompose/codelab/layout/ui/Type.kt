@@ -1,4 +1,4 @@
-package com.an7one.officialdoc.jetpackcompose.codelab.layout.ui
+package com.an7one.officialdoc.jetpackCompose.codelab.layout.ui
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

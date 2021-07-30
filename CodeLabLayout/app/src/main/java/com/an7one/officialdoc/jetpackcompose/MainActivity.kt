@@ -1,4 +1,4 @@
-package com.an7one.officialdoc.jetpackcompose
+package com.an7one.officialdoc.jetpackCompose
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.an7one.officialdoc.jetpackcompose.codelab.layout.DemoLayoutActivity
+import com.an7one.officialdoc.jetpackCompose.codelab.layout.DemoLayoutActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
