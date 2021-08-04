@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HelloCodeLabViewModel : ViewModel() {
+class ViewModelHelloCodeLab : ViewModel() {
 
     // LiveData holds state which is observed by the UI
     // (state flows down from ViewModel)
