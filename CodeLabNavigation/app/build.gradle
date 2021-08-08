@@ -76,10 +76,9 @@ dependencies {
     implementation "androidx.core:core-ktx:$versionKTX"
     implementation "com.google.android.material:material:$versionMaterial"
     implementation "androidx.fragment:fragment-ktx:$versionFragment"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versionKotlin"
     implementation "com.jakewharton.timber:timber:4.7.1"
 
-    // Compose
+    // Jetpack Compose
     implementation "androidx.compose.runtime:runtime:$versionCompose"
     implementation "androidx.compose.ui:ui:$versionCompose"
     implementation "androidx.compose.foundation:foundation:$versionCompose"
@@ -90,14 +89,14 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$versionCompose"
     implementation "androidx.compose.material:material-icons-extended:$versionCompose"
     implementation "androidx.activity:activity-compose:$versionCompose"
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
 
     // Testing dependencies
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$versionKotlin"
     androidTestImplementation "androidx.arch.core:core-testing:$versionCoreTesting"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$versionEspresso"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versionEspresso"
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'
 
     // Compose testing dependencies
     androidTestImplementation "androidx.compose.ui:ui-test:$versionCompose"
