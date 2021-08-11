@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.an7one.officialDoc.jetpackCompose.codeLabAnimation.ui.page.Home
 import com.an7one.officialDoc.jetpackCompose.codeLabAnimation.ui.theme.ThemeCodeLabAnimation
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,5 +15,8 @@ class MainActivity : AppCompatActivity() {
                 Home()
             }
         }
+
+//        if (BuildConfig.DEBUG)
+        Timber.plant(Timber.DebugTree())
     }
 }

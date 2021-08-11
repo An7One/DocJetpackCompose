@@ -1,8 +1,7 @@
 package com.an7one.officialDoc.jetpackCompose.codeLabAnimation.ui.page
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.splineBasedDecay
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,12 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +43,8 @@ import com.an7one.officialDoc.jetpackCompose.codeLabAnimation.ui.theme.*
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 private enum class TabPage {
     Home,
@@ -85,7 +88,7 @@ fun Home() {
 
     val lazyListState = rememberLazyListState()
 
-    val backgroundColor = if (tabPage == TabPage.Home) Purple100 else Green300
+    val backgroundColor by animateColorAsState(if (tabPage == TabPage.Home) Purple100 else Green300)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -100,7 +103,7 @@ fun Home() {
         backgroundColor = backgroundColor,
         floatingActionButton = {
             FABHome(
-                expanded = lazyListState.isScrollingUp(),
+                extended = lazyListState.isScrollingUp(),
                 onClick = {
                     coroutineScope.launch {
                         showEditMessage()
@@ -113,6 +116,7 @@ fun Home() {
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
             state = lazyListState
         ) {
+
             item { Header(title = stringResource(id = R.string.weather)) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
@@ -187,7 +191,7 @@ fun Home() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun FABHome(
-    expanded: Boolean,
+    extended: Boolean,
     onClick: () -> Unit
 ) {
     // Use `FloatingActionButton` rather than `ExtendedFloatingActionButton` for full control on
@@ -205,7 +209,7 @@ private fun FABHome(
             )
 
             // Toggle the visibility of the content with animation.
-            if (expanded) {
+            AnimatedVisibility(extended) {
                 Text(
                     text = stringResource(id = R.string.edit),
                     modifier = Modifier
@@ -223,7 +227,17 @@ private fun FABHome(
 @Composable
 private fun EditMessage(shown: Boolean) {
     AnimatedVisibility(
-        visible = shown
+        visible = shown,
+        enter = slideInVertically(
+            // to enter by sliding down from offset -fullHeight to 0
+            initialOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            // to exit by sliding up from offset 0 to -fullHeight
+            targetOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing)
+        )
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -256,8 +270,8 @@ private fun LazyListState.isScrollingUp(): Boolean {
                 previousIndex = firstVisibleItemIndex
                 previousScrollOffset = firstVisibleItemScrollOffset
             }
-        }.value
-    }
+        }
+    }.value
 }
 
 /**
@@ -303,6 +317,7 @@ private fun RowTopic(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .animateContentSize()
         ) {
             Row {
                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
@@ -391,9 +406,46 @@ private fun IndicatorTabHome(
     tabPositions: List<TabPosition>,
     tabPage: TabPage
 ) {
-    val indicatorLeft = tabPositions[tabPage.ordinal].left
-    val indicatorRight = tabPositions[tabPage.ordinal].right
-    val color = if (tabPage == TabPage.Home) Purple700 else Green800
+    val transition = updateTransition(
+        tabPage,
+        label = "Tab Indicator"
+    )
+
+    val indicatorLeft by transition.animateDp(
+        transitionSpec = {
+            if (TabPage.Home isTransitioningTo TabPage.Work) {
+                spring(stiffness = Spring.StiffnessVeryLow)
+            } else {
+                spring(stiffness = Spring.StiffnessMedium)
+            }
+        },
+        label = "Indicator Left"
+    ) { page ->
+        tabPositions[page.ordinal].left
+    }
+
+    val indicatorRight by transition.animateDp(
+        transitionSpec = {
+            if (TabPage.Home isTransitioningTo TabPage.Work) {
+                spring(stiffness = Spring.StiffnessMedium)
+            } else {
+                spring(stiffness = Spring.StiffnessVeryLow)
+            }
+
+        },
+        label = "Indicator right"
+    ) { page ->
+        tabPositions[page.ordinal].right
+    }
+
+    val color by transition.animateColor(
+        label = "Border color"
+    ) { page ->
+        if (page == TabPage.Home)
+            Purple700
+        else
+            Green800
+    }
 
     Box(
         Modifier
@@ -402,7 +454,7 @@ private fun IndicatorTabHome(
             .offset(x = indicatorLeft)
             .width(indicatorRight - indicatorLeft)
             .padding(4.dp)
-            .fillMaxWidth()
+            .fillMaxSize()
             .border(
                 BorderStroke(2.dp, color),
                 RoundedCornerShape(4.dp)
@@ -485,7 +537,18 @@ private fun RowWeather(
  */
 @Composable
 private fun RowLoading() {
-    val alpha = 1f
+    val infiniteTransition = rememberInfiniteTransition()
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 1000
+                0.7f at 500
+            },
+            repeatMode = RepeatMode.Reverse
+        )
+    )
     Row(
         modifier = Modifier
             .heightIn(min = 64.dp)
@@ -555,31 +618,85 @@ private fun RowTask(
 private fun Modifier.swipeToDismiss(
     onDismissed: () -> Unit
 ): Modifier = composed {
+
+    val offsetX = remember { Animatable(0f) }
+
     pointerInput(Unit) {
+
+        // to calculate a settling position of a fling animation
         val decay = splineBasedDecay<Float>(this)
 
+        // to wrap in a coroutine scope to use suspend functions,
+        // for touch events and animation
         coroutineScope {
             while (true) {
+                // to wait for a touch down event
                 val pointerId = awaitPointerEventScope { awaitFirstDown().id }
+                offsetX.stop()
 
+                // to prepare for drag events and record velocity of a fling
                 val velocityTracker = VelocityTracker()
 
+                // to wait for drag events
                 awaitPointerEventScope {
                     horizontalDrag(pointerId = pointerId) { change ->
+                        val horizontalDragOffset = offsetX.value + change.positionChange().x
+                        launch {
+                            offsetX.snapTo(horizontalDragOffset)
+                        }
+                        // to record the velocity of the drag
                         velocityTracker.addPosition(change.uptimeMillis, change.position)
 
+                        // to consume the gesture event,
+                        // not passed to external
                         change.consumePositionChange()
                     }
                 }
 
+                // to calculate the velocity of the fling, after dragging finished
                 val velocity = velocityTracker.calculateVelocity().x
 
-                launch {
+                val targetOffsetX = decay.calculateTargetValue(offsetX.value, velocity)
 
+                offsetX.updateBounds(
+                    lowerBound = -size.width.toFloat(),
+                    upperBound = size.width.toFloat()
+                )
+
+                launch {
+                    if (targetOffsetX.absoluteValue <= size.width) {
+                        // without enough velocity,
+                        // to slide back
+                        offsetX.animateTo(targetValue = 0f, initialVelocity = velocity)
+                    } else {
+                        // with enough velocity,
+                        // to slide away the element to the edge
+                        offsetX.animateDecay(velocity, decay)
+                        // the element was swiped away
+                        onDismissed()
+                    }
                 }
             }
         }
     }.offset {
-        IntOffset(0, 0)
+        IntOffset(offsetX.value.roundToInt(), 0)
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewTabBarHome() {
+    TabBarHome(
+        backgroundColor = Purple100,
+        tabPage = TabPage.Home,
+        onTabSelected = { }
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewHome() {
+    ThemeCodeLabAnimation {
+        Home()
     }
 }
